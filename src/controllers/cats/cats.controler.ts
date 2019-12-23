@@ -6,7 +6,10 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
+  Req,
+  Res,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { Cat, CatDto } from './cats';
 import { CatsService } from './cats.service';
 
@@ -14,13 +17,15 @@ import { CatsService } from './cats.service';
 export class CastController {
   constructor(private readonly catsService: CatsService) {}
   @Get()
-  async findAll(): Promise<Cat[]> {
+  async findAll(@Req() request: Request): Promise<Cat[]> {
     return this.catsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id): string {
-    return `This action returns a #${id} cat`;
+  findOne(@Param('id') id, @Res() res: Response) {
+    res.json({
+      id,
+    });
   }
 
   @Post()
